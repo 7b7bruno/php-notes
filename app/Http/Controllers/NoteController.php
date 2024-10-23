@@ -12,7 +12,8 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::all();
+        return view('notes.index', ['allNotes' => $notes]);
     }
 
     /**
@@ -20,7 +21,7 @@ class NoteController extends Controller
      */
     public function create()
     {
-        //
+        return view('notes.create');
     }
 
     /**
@@ -28,15 +29,22 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Note::create([
+            'title' => $request->input('title'),
+            'content' => $request->input('content')
+        ]);
+
+        return redirect(route('notes.index'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Note $note)
+    public function show($id)
     {
-        //
+        $note = Note::find($id);
+
+        return view('notes.show', ['note' => $note]);
     }
 
     /**
@@ -58,8 +66,10 @@ class NoteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Note $note)
+    public function destroy($id)
     {
-        //
+        Note::destroy($id);
+
+        return redirect(route('notes.index'));
     }
 }
